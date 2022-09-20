@@ -1,5 +1,8 @@
+package aspectj
+
 import me.jingwang.aspectj.Student
 import me.jingwang.aspectj.User
+import me.jingwang.aspectj.say
 import org.junit.Test
 
 /**
@@ -17,5 +20,6 @@ class TestAspectj {
     @Test
     fun testStudent() {
         Student().read()
+        Student().say()
     }
 }

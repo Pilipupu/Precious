@@ -6,7 +6,7 @@
 
     <artifactId>Precious</artifactId>
     <modules>
-        <module>core</module>
+<!--        <module>core</module>-->
         <module>util</module>
     </modules>
     <groupId>me.jingwang</groupId>
@@ -20,7 +20,8 @@
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
         <kotlin.version>1.7.10</kotlin.version>
-        <aspectj.version>1.9.1</aspectj.version>
+<!--        aspectj tools support java 11 > 1.9.2 -->
+        <aspectj.version>1.9.2</aspectj.version>
     </properties>
 
     <repositories>
@@ -36,8 +37,16 @@
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
-
+    <pluginRepositories>
+        <pluginRepository>
+            <id>aliyun</id>
+            <name>aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
     <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -50,6 +59,12 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/main/java</source>
+                                <source>src/main/kotlin</source>
+                            </sourceDirs>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>test-compile</id>
@@ -57,6 +72,12 @@
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/test/java</source>
+                                <source>src/test/kotlin</source>
+                            </sourceDirs>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -65,55 +86,86 @@
                 <version>2.22.2</version>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.14.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <executions>
+                    <!-- Replacing default-compile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <!-- Replacing default-testCompile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>compile</phase>
+                        <goals> <goal>compile</goal> </goals>
+                    </execution>
+                    <execution>
+                        <id>java-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals> <goal>testCompile</goal> </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <source>11</source>
                     <target>11</target>
-                    <complianceLevel>11</complianceLevel>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>aspectj-maven-plugin</artifactId>-->
+<!--                <version>1.14.0</version>-->
+<!--                <configuration>-->
+<!--                    <source>11</source>-->
+<!--                    <target>11</target>-->
+<!--                    <complianceLevel>11</complianceLevel>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M1</version>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>com.jcabi</groupId>-->
-<!--                <artifactId>jcabi-maven-plugin</artifactId>-->
-<!--                <version>0.14.1</version>-->
-<!--                <configuration>-->
-<!--                    <source>11</source>-->
-<!--                    <target>11</target>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>ajc</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.aspectj</groupId>-->
-<!--                        <artifactId>aspectjrt</artifactId>-->
-<!--                        <version>${aspectj.version}</version>-->
-<!--                    </dependency>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.aspectj</groupId>-->
-<!--                        <artifactId>aspectjtools</artifactId>-->
-<!--                        <version>${aspectj.version}</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-maven-plugin</artifactId>
+                <version>0.17.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>ajc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjrt</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -168,6 +220,4 @@
             <version>2.15.0</version>
         </dependency>
     </dependencies>
-
-
 </project>

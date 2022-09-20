@@ -9,6 +9,10 @@ package me.jingwang.aspectj
 class User {
     @LogAnno
     fun read() {
-        println("reading")
+        println("user reading")
     }
+}
+
+fun Student.say() {
+    println("say")
 }
