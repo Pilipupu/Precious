@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+1. 把不同类的日志打印到不同文件 https://blog.csdn.net/Roy_70/article/details/75740009
+
+三次level 拦截
+- Root - level
+- Logger - level
+- Appender - ThresholdFilter
+-->
+<Configuration status="warn" monitorInterval="30">
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="/Users/jingwang/log/util.log"
+                filePattern="/Users/jingwang/log/util-%d{yyyy-MM-dd}-%i.log.gz">
+            <Policies>
+                <SizeBasedTriggeringPolicy size="450 MB"/>
+            </Policies>
+            <PatternLayout pattern="%d %-5p [%c{2}:%L] [%t] - %X{api,job} - %msk%n"/>
+        </RollingFile>
+
+        <RollingFile name="NoMaskRollingFile" fileName="/Users/jingwang/log/util.log"
+                     filePattern="/Users/jingwang/log/util-%d{yyyy-MM-dd}-%i.log.gz">
+            <Policies>
+                <SizeBasedTriggeringPolicy size="450 MB"/>
+            </Policies>
+            <PatternLayout pattern="%d %-5p [%c{2}:%L] [%t] - %X{api,job} - %m%n"/>
+        </RollingFile>
+        <!--这个输出控制台的配置，这里输出除了warn和error级别的信息到System.out-->
+        <Console name="console_out_appender" target="SYSTEM_OUT">
+            <!-- 控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) -->
+            <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT"/>
+            <!-- 输出日志的格式 -->
+            <PatternLayout pattern="%5p [%t] %d{yyyy-MM-dd HH:mm:ss} (%F:%L) %m%n"/>
+        </Console>
+        <!--这个输出控制台的配置，这里输出warn和error级别的信息到System.err，在eclipse控制台上看到的是红色文字-->
+        <Console name="console_err_appender" target="SYSTEM_ERR">
+            <!-- 控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) -->
+            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!-- 输出日志的格式 -->
+            <PatternLayout pattern="%5p [%t] %d{yyyy-MM-dd HH:mm:ss} (%F:%L) %m%n"/>
+        </Console>
+
+        <Console name="console_mask_appender" target="SYSTEM_OUT">
+<!--            <PatternLayout pattern="%5p [%t] %d{yyyy-MM-dd HH:mm:ss} (%F:%L) %m%n"/>-->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level - %-0.-20msk%n"/>
+        </Console>
+
+        <!--这个输出控制台的配置，这里输出除了warn和error级别的信息到System.out-->
+        <Console name="no_mask_console_out_appender" target="SYSTEM_OUT">
+            <!-- 控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) -->
+            <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT"/>
+            <!-- 输出日志的格式 -->
+            <PatternLayout pattern="%5p [%t] %d{yyyy-MM-dd HH:mm:ss} (%F:%L) %-0.-20m%n"/>
+        </Console>
+
+        <!--  log4j2-redact-filter插件进行密码脱敏      -->
+        <Console name="redact_filter_console_out_appender" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} %p %c{1}: %m%n</pattern>
+            </PatternLayout>
+            <RedactFilter regex='"password" : ".*"' replacement='"password" : "******"' />
+            <RedactFilter>
+
+            </RedactFilter>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+<!--        定义指定包名的日志配置 -->
+<!--        additivity="false" 不继承上级Appender-->
+        <Logger name="me.jingwang" level="debug" additivity="false">
+            <AppenderRef ref="redact_filter_console_out_appender"/>
+        </Logger>
+        <Logger name="no.mask.me.jingwang" level="debug" additivity="false">
+            <AppenderRef ref="no_mask_console_out_appender"/>
+        </Logger>
+
+<!--        默认Appender-->
+<!--        日志会输出到所有Appender上-->
+<!--        Appender中可以定义匹配规则， 以及匹配后的动作（即Filter，ACCEPT还是DENY）-->
+        <Root level="info" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="console_err_appender"/>
+            <AppenderRef ref="console_out_appender"/>
+        </Root>
+    </Loggers>
+</Configuration>

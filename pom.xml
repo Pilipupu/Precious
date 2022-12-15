@@ -22,6 +22,9 @@
         <kotlin.version>1.7.10</kotlin.version>
 <!--        aspectj tools support java 11 > 1.9.2 -->
         <aspectj.version>1.9.2</aspectj.version>
+        <jacksonVersion>2.10.2</jacksonVersion>
+        <ktor.version>1.6.8</ktor.version>
+        <logback_version>1.2.5</logback_version>
     </properties>
 
     <repositories>
@@ -182,6 +185,41 @@
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.ini4j</groupId>
+                <artifactId>ini4j</artifactId>
+                <version>0.5.4</version>
+            </dependency>
+            <dependency>
+                <groupId>io.ktor</groupId>
+                <artifactId>ktor-server-core</artifactId>
+                <version>${ktor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.ktor</groupId>
+                <artifactId>ktor-server-netty</artifactId>
+                <version>${ktor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.ktor</groupId>
+                <artifactId>ktor-client-core</artifactId>
+                <version>${ktor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.ktor</groupId>
+                <artifactId>ktor-client-cio</artifactId>
+                <version>${ktor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.ktor</groupId>
+                <artifactId>ktor-auth-jwt</artifactId>
+                <version>${ktor.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -208,7 +246,6 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>2.15.0 </version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -218,6 +255,89 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>log4j2-redact-filter</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+
+<!--        jackson-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-parameter-names</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr353</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-afterburner</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>${jacksonVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
+            <!-- or, for Android: -->
+<!--            <version>31.1-android</version>-->
+        </dependency>
+        <dependency>
+            <groupId>com.codingrodent</groupId>
+            <artifactId>jackson-json-crypto</artifactId>
+            <version>2.2.0</version>
         </dependency>
     </dependencies>
 </project>
